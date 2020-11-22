@@ -102,3 +102,6 @@ modules.xml
 .ionide
 
 # End of https://www.toptal.com/developers/gitignore/api/jetbrains+all,visualstudiocode
+
+.env
+files/*.png
