@@ -39,8 +39,8 @@ header('Content-Type: text/text');
 ///
 $config = array();
 
-$config['key'] = getenv('API_KEY'); // This is the master key, to access the uploader
-$config['save'] = 'i/'; // Enter the directory to save to (keep empty for none)
+$config['key'] = getenv('API_KEY');
+$config['save'] = 'files/';
 $config['host'] = 'http://' . $_SERVER['HTTP_HOST'] . '/';
 $config['allowed'] = array('png', 'jpg', 'gif', 'rar', 'zip', 'mp4', 'mp3', 'txt');
 $config['max_upload_size'] = 25; // IN MB
@@ -53,16 +53,19 @@ function UploadFile($config)
 
     // Validate Key
     if (!isset($_POST['key']) || $_POST['key'] != $config['key']) {
-        die(401);
+        header($_SERVER["SERVER_PROTOCOL"] . " 401 Unauthorized");
+        die();
     }
 
     // Validate ShareX
     if (!isset($_FILES['fdata'])) {
-        die('INVALID_DATA_PACKET');
+        header($_SERVER["SERVER_PROTOCOL"] . " 400 Bad Request");
+        die('Invalid file data!');
     }
 
     if ($_FILES['fdata']['size'] > $config['max_upload_size'] * 1024 * 1024) {
-        die('DATA_TOO_LARGE');
+        header($_SERVER["SERVER_PROTOCOL"] . " 413 Payload Too Large");
+        die('Too large file sent!');
     }
 
     // Create Data for file
@@ -74,19 +77,22 @@ function UploadFile($config)
 
     // Validate Extension
     if (!in_array($data['extension'], $config['allowed'])) {
-        die('INVALID_DATA_EXTENSION');
+        header($_SERVER["SERVER_PROTOCOL"] . " 400 Bad Request");
+        die('Invalid extension');
     }
 
     if (move_uploaded_file($data['buffer'], $data['final-save-name'])) {
 
         $file_signed = substr(md5(time() . rand() . $data['final-save-name']), 0, 10);
         // TODO if file name exists regenerate name
-        rename($data['final-save-name'], $config['save'] . $file_signed . '.' . $data['extension']); // Rename file
+        rename($data['final-save-name'], $config['save'] . $file_signed . '.' . $data['extension']);
 
-        die($config['host'] . $config['save'] . $file_signed . '.' . $data['extension']); // Return file location
+        header($_SERVER["SERVER_PROTOCOL"] . " 201 Created");
+        die($config['host'] . $config['save'] . $file_signed . '.' . $data['extension']);
     }
 
-    die('FILE_CANT_UPLOAD');
+    header($_SERVER["SERVER_PROTOCOL"] . " 500 Internal Server Error");
+    die("File can't be uploaded");
 }
 
 UploadFile($config);
