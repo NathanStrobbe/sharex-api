@@ -1,9 +1,9 @@
 version: '3'
 
 services:
-  share-x-api:
-    image: share-x-api:local
-    container_name: share-x-api
+  sharex-api:
+    image: sharex-api:local
+    container_name: sharex-api
     build:
       context: .
       dockerfile: Dockerfile
