@@ -29,25 +29,16 @@
   SOFTWARE.
 */
 
-// NOTE: REMEMBER TO SET upload_max_filesize in the php.ini!
-
 // Set Our Return data type to text, (to prevent any sort of XSS or php shell execution exploitation)
 header('Content-Type: text/text');
 
-///
-/// Application Parameters
-///
 $config = array();
-
 $config['key'] = getenv('API_KEY');
 $config['save'] = 'files/';
 $config['host'] = 'https://' . $_SERVER['HTTP_HOST'] . '/';
 $config['allowed'] = array('png', 'jpg', 'gif', 'rar', 'zip', 'mp4', 'mp3', 'txt');
 $config['max_upload_size'] = 25; // IN MB
 
-///
-/// Upload File
-///
 function UploadFile($config)
 {
 
