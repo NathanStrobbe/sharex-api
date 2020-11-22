@@ -34,7 +34,7 @@ header('Content-Type: text/text');
 
 $config = array();
 $config['key'] = getenv('API_KEY');
-$config['save'] = 'files/';
+$config['save'] = 'i/';
 $config['host'] = 'https://' . $_SERVER['HTTP_HOST'] . '/';
 $config['allowed'] = array('png', 'jpg', 'gif', 'rar', 'zip', 'mp4', 'mp3', 'txt');
 $config['max_upload_size'] = 25; // IN MB

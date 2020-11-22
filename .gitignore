@@ -104,4 +104,4 @@ modules.xml
 # End of https://www.toptal.com/developers/gitignore/api/jetbrains+all,visualstudiocode
 
 .env
-files/*.png
+i/*.png
